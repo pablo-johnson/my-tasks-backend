@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "my-tasks-qa",
+    "qa": "my-tasks-qa"
+  },
+  "targets": {},
+  "etags": {}
+}
