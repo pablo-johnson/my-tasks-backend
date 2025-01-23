@@ -1,18 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { firebaseAuth, firestore, storage } from './firebase.config';
+import { Injectable, Inject } from '@nestjs/common';
 
 @Injectable()
 export class FirebaseService {
+  constructor(
+    @Inject('FIRESTORE_INSTANCE') private readonly firestoreInstance: any,
+    @Inject('FIREBASE_AUTH') private readonly authInstance: any,
+    @Inject('FIREBASE_STORAGE') private readonly storageInstance: any,
+  ) {}
 
   get firestore() {
-    return firestore;
+    return this.firestoreInstance;
   }
 
   get auth() {
-    return firebaseAuth;
+    return this.authInstance;
   }
 
   get storage() {
-    return storage;
+    return this.storageInstance;
   }
 }
