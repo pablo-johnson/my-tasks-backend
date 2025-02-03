@@ -1,11 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { firestore } from '../firebase/firebase.config';
+import { Injectable, Inject } from '@nestjs/common';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { CreateProjectDto } from './dtos/create-project.dto';
 
 @Injectable()
 export class ProjectsService {
-  private projectsCollection = firestore.collection('projects');
+
+  private projectsCollection;
+
+  constructor(
+    @Inject('FIRESTORE_INSTANCE') private readonly firestore: any,
+  ) {
+    this.projectsCollection = this.firestore.collection('projects');
+  }
 
   async createProject(data: CreateProjectDto) {
     const project = await this.projectsCollection.add(data);
@@ -20,11 +26,11 @@ export class ProjectsService {
 
   async getAllProjects() {
     const projectsSnapshot = await this.projectsCollection.get();
-    return projectsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return projectsSnapshot.docs.map((doc:any) => ({ id: doc.id, ...doc.data() }));
   }
 
   async updateProject(id: string, data: UpdateProjectDto) {
-    await this.projectsCollection.doc(id).update({...data});
+    await this.projectsCollection.doc(id).update({ ...data });
     return { id, ...data };
   }
 
